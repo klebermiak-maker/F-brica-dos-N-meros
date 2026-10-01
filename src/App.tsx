@@ -11,10 +11,23 @@ import { GoldenMaterialLab } from './components/GoldenMaterialLab';
 import { AdditionBuilder } from './components/AdditionBuilder';
 import { WorksheetGenerator } from './components/WorksheetGenerator';
 import { PedagogicalGuide } from './components/PedagogicalGuide';
+import { AchievementsModal } from './components/AchievementsModal';
+import { AchievementToast } from './components/AchievementToast';
+import { 
+  loadStoredMetrics, 
+  saveStoredMetrics, 
+  checkAchievements, 
+  StoredMetrics, 
+  AchievementDef, 
+  ACHIEVEMENTS_DEFINITIONS 
+} from './utils/achievementsData';
+import { playVictoryFanfare } from './utils/audio';
+import confetti from 'canvas-confetti';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function App() {
   const [currentMode, setCurrentMode] = useState<GameMode>('adventure');
+  
   const [stars, setStars] = useState<number>(() => {
     try {
       const saved = localStorage.getItem('d08_stars');
@@ -42,6 +55,11 @@ export default function App() {
     }
   });
 
+  // Achievements & Milestones state
+  const [metrics, setMetrics] = useState<StoredMetrics>(() => loadStoredMetrics(stars));
+  const [isAchievementsOpen, setIsAchievementsOpen] = useState(false);
+  const [toastAchievement, setToastAchievement] = useState<AchievementDef | null>(null);
+
   useEffect(() => {
     try {
       localStorage.setItem('d08_stars', stars.toString());
@@ -51,6 +69,49 @@ export default function App() {
       // Ignore localStorage errors
     }
   }, [stars, score, soundEnabled]);
+
+  // Keep metrics.totalStars synced with stars state
+  useEffect(() => {
+    setMetrics(prev => {
+      if (prev.totalStars !== stars) {
+        const updated = { ...prev, totalStars: stars };
+        saveStoredMetrics(updated);
+        // Check if any star-related achievement triggered
+        const { updatedMetrics, newlyUnlocked } = checkAchievements(updated);
+        if (newlyUnlocked.length > 0) {
+          triggerAchievementUnlock(newlyUnlocked);
+        }
+        return updatedMetrics;
+      }
+      return prev;
+    });
+  }, [stars]);
+
+  const triggerAchievementUnlock = (unlockedList: AchievementDef[]) => {
+    if (unlockedList.length === 0) return;
+    const first = unlockedList[0];
+    setToastAchievement(first);
+
+    // Reward bonus stars
+    const totalBonus = unlockedList.reduce((acc, curr) => acc + curr.rewardStars, 0);
+    if (totalBonus > 0) {
+      setStars(prev => prev + totalBonus);
+    }
+
+    if (soundEnabled) {
+      playVictoryFanfare();
+    }
+
+    try {
+      confetti({
+        particleCount: 80,
+        spread: 75,
+        origin: { y: 0.25, x: 0.8 }
+      });
+    } catch {
+      // Ignore
+    }
+  };
 
   const handleAddStars = (amount: number) => {
     setStars(prev => prev + amount);
@@ -64,9 +125,73 @@ export default function App() {
     setSoundEnabled(prev => !prev);
   };
 
+  // Called when any equation is solved across modes
+  const handleEquationSolved = (streak: number = 1) => {
+    setMetrics(prev => {
+      const nextSolved = prev.totalEquationsSolved + 1;
+      const nextCurrentStreak = streak;
+      const nextMaxStreak = Math.max(prev.maxStreak, streak);
+      
+      const candidate: StoredMetrics = {
+        ...prev,
+        totalEquationsSolved: nextSolved,
+        currentStreak: nextCurrentStreak,
+        maxStreak: nextMaxStreak,
+        totalStars: stars
+      };
+
+      const { updatedMetrics, newlyUnlocked } = checkAchievements(candidate);
+      saveStoredMetrics(updatedMetrics);
+
+      if (newlyUnlocked.length > 0) {
+        triggerAchievementUnlock(newlyUnlocked);
+      }
+
+      return updatedMetrics;
+    });
+  };
+
+  // Called when a piece exchange is made in Material Dourado Lab
+  const handleLabExchange = () => {
+    setMetrics(prev => {
+      const candidate: StoredMetrics = {
+        ...prev,
+        labExchangesDone: prev.labExchangesDone + 1,
+        totalStars: stars
+      };
+      const { updatedMetrics, newlyUnlocked } = checkAchievements(candidate);
+      saveStoredMetrics(updatedMetrics);
+
+      if (newlyUnlocked.length > 0) {
+        triggerAchievementUnlock(newlyUnlocked);
+      }
+
+      return updatedMetrics;
+    });
+  };
+
+  // Called when an addition combo is found in Addition Builder
+  const handleBuilderCombo = () => {
+    setMetrics(prev => {
+      const candidate: StoredMetrics = {
+        ...prev,
+        builderCombosFound: prev.builderCombosFound + 1,
+        totalStars: stars
+      };
+      const { updatedMetrics, newlyUnlocked } = checkAchievements(candidate);
+      saveStoredMetrics(updatedMetrics);
+
+      if (newlyUnlocked.length > 0) {
+        triggerAchievementUnlock(newlyUnlocked);
+      }
+
+      return updatedMetrics;
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-amber-50/30 text-slate-800 font-sans">
-      {/* 3-Zone Header Contract */}
+      {/* 3-Zone Header Contract with Achievements button */}
       <Header
         currentMode={currentMode}
         onSelectMode={setCurrentMode}
@@ -74,6 +199,9 @@ export default function App() {
         score={score}
         soundEnabled={soundEnabled}
         onToggleSound={handleToggleSound}
+        onOpenAchievements={() => setIsAchievementsOpen(true)}
+        unlockedAchievementsCount={metrics.unlockedAchievementIds.length}
+        totalAchievementsCount={ACHIEVEMENTS_DEFINITIONS.length}
       />
 
       {/* Main Game Stage with Fluid Framer-Motion Transitions */}
@@ -95,6 +223,7 @@ export default function App() {
                 onAddStars={handleAddStars}
                 onAddScore={handleAddScore}
                 soundEnabled={soundEnabled}
+                onEquationSolved={handleEquationSolved}
               />
             )}
 
@@ -103,6 +232,8 @@ export default function App() {
                 onAddStars={handleAddStars}
                 onAddScore={handleAddScore}
                 soundEnabled={soundEnabled}
+                onEquationSolved={handleEquationSolved}
+                onLabExchange={handleLabExchange}
               />
             )}
 
@@ -111,6 +242,8 @@ export default function App() {
                 onAddStars={handleAddStars}
                 onAddScore={handleAddScore}
                 soundEnabled={soundEnabled}
+                onEquationSolved={handleEquationSolved}
+                onBuilderCombo={handleBuilderCombo}
               />
             )}
 
@@ -124,6 +257,24 @@ export default function App() {
           </motion.div>
         </AnimatePresence>
       </main>
+
+      {/* Achievements Modal */}
+      <AchievementsModal
+        isOpen={isAchievementsOpen}
+        onClose={() => setIsAchievementsOpen(false)}
+        metrics={metrics}
+        soundEnabled={soundEnabled}
+      />
+
+      {/* Transient Unlock Toast */}
+      <AchievementToast
+        achievement={toastAchievement}
+        onDismiss={() => setToastAchievement(null)}
+        onOpenModal={() => {
+          setToastAchievement(null);
+          setIsAchievementsOpen(true);
+        }}
+      />
 
       {/* Quiet, Human Educational Footer */}
       <footer className="print:hidden border-t border-amber-200/60 bg-white/70 py-6 mt-12 text-center text-xs text-slate-500">

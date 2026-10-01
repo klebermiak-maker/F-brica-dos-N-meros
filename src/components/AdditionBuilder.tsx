@@ -18,6 +18,8 @@ interface AdditionBuilderProps {
   onAddStars: (amount: number) => void;
   onAddScore: (amount: number) => void;
   soundEnabled: boolean;
+  onEquationSolved?: (streak: number) => void;
+  onBuilderCombo?: () => void;
 }
 
 interface PuzzleLevel {
@@ -82,7 +84,9 @@ const PUZZLE_LEVELS: PuzzleLevel[] = [
 export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
   onAddStars,
   onAddScore,
-  soundEnabled
+  soundEnabled,
+  onEquationSolved,
+  onBuilderCombo
 }) => {
   const [levelIndex, setLevelIndex] = useState(0);
   const currentPuzzle = PUZZLE_LEVELS[levelIndex] || PUZZLE_LEVELS[0];
@@ -141,6 +145,8 @@ export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
     
     onAddStars(2);
     onAddScore(75);
+    onEquationSolved?.(1);
+    onBuilderCombo?.();
 
     try {
       confetti({
@@ -160,13 +166,18 @@ export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
     }
   };
 
+  const handleSelectLevel = (idx: number) => {
+    if (soundEnabled) playPopSound();
+    setLevelIndex(idx);
+    setTrayTiles([]);
+    setDiscoveredCombinations([]);
+    setMessage(`Desafio #${idx + 1}: Monte o número alvo ${PUZZLE_LEVELS[idx].target} com diferentes adições!`);
+  };
+
   const handleNextLevel = () => {
     if (soundEnabled) playPopSound();
     const nextIdx = (levelIndex + 1) % PUZZLE_LEVELS.length;
-    setLevelIndex(nextIdx);
-    setTrayTiles([]);
-    setDiscoveredCombinations([]);
-    setMessage(`Novo nível da fábrica! Monte o número ${PUZZLE_LEVELS[nextIdx].target} de formas diferentes!`);
+    handleSelectLevel(nextIdx);
   };
 
   return (
@@ -178,6 +189,38 @@ export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
           message={message}
           speakableText={message}
         />
+      </div>
+
+      {/* 10 Levels Selector Strip */}
+      <div className="bg-white border border-amber-200/80 rounded-2xl p-3 sm:p-4 shadow-xs">
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+            10 Níveis da Fábrica de Somas:
+          </span>
+          <span className="text-xs text-amber-700 font-bold">
+            Nível {levelIndex + 1} de 10 (Alvo: {currentPuzzle.target})
+          </span>
+        </div>
+        <div className="grid grid-cols-5 sm:grid-cols-10 gap-1.5">
+          {PUZZLE_LEVELS.map((lvl, idx) => {
+            const isCurrent = idx === levelIndex;
+            return (
+              <button
+                key={lvl.target}
+                onClick={() => handleSelectLevel(idx)}
+                type="button"
+                className={`py-2 px-1 rounded-xl text-center border font-mono font-bold text-xs transition-all cursor-pointer ${
+                  isCurrent
+                    ? 'bg-amber-500 border-amber-600 text-white shadow-sm ring-2 ring-amber-300'
+                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-amber-50 hover:border-amber-300'
+                }`}
+              >
+                <div className="text-[10px] uppercase font-sans font-semibold opacity-80">#{idx + 1}</div>
+                <div>{lvl.target}</div>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Target Level Card */}
@@ -193,22 +236,20 @@ export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
-            {discoveredCombinations.length >= 2 && (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleNextLevel}
-                type="button"
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm cursor-pointer"
-              >
-                <span>Próximo Nível</span>
-                <ArrowRight className="w-4 h-4" />
-              </motion.button>
-            )}
+            <button
+              onClick={handleNextLevel}
+              type="button"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm cursor-pointer"
+            >
+              <span>Próximo Nível</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
             <button
               onClick={() => {
+                if (soundEnabled) playPopSound();
                 setTrayTiles([]);
                 setDiscoveredCombinations([]);
+                setMessage('Esteira e fórmulas reiniciadas.');
               }}
               type="button"
               className="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 cursor-pointer"
@@ -332,10 +373,21 @@ export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
 
           <div>
             {isMatch ? (
-              <span className="px-3 py-1 bg-emerald-500/20 border border-emerald-500 text-emerald-300 text-xs font-bold rounded-lg flex items-center gap-1.5">
-                <Check className="w-4 h-4 text-emerald-400" />
-                Meta Atingida!
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 bg-emerald-500/20 border border-emerald-500 text-emerald-300 text-xs font-bold rounded-lg flex items-center gap-1.5">
+                  <Check className="w-4 h-4 text-emerald-400" />
+                  Meta Atingida!
+                </span>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleClearTray}
+                  className="px-3 py-1 bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold text-xs rounded-lg flex items-center gap-1 shadow-xs cursor-pointer"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Testar Nova Forma</span>
+                </motion.button>
+              </div>
             ) : currentSum > currentPuzzle.target ? (
               <span className="px-3 py-1 bg-rose-500/20 border border-rose-500 text-rose-300 text-xs font-bold rounded-lg">
                 Passou em {currentSum - currentPuzzle.target}

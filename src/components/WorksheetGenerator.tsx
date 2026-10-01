@@ -66,14 +66,14 @@ const RAW_WORKSHEETS: Record<string, RawWorksheetQuestion[]> = {
     {
       id: 4,
       number: 63,
-      question: 'Qual das adições NÃO resulta no número 63?',
+      question: 'Qual das diferentes adições abaixo resulta no número 63?',
       options: [
-        { text: '60 + 30', isCorrect: true },
-        { text: '60 + 3', isCorrect: false },
-        { text: '50 + 13', isCorrect: false },
-        { text: '40 + 23', isCorrect: false },
+        { text: '50 + 13', isCorrect: true },
+        { text: '60 + 30', isCorrect: false },
+        { text: '50 + 3', isCorrect: false },
+        { text: '40 + 13', isCorrect: false },
       ],
-      explanation: '60 + 30 = 90, portanto NÃO é 63.'
+      explanation: '50 + 13 = 63 (troca de 1 dezena por 10 unidades).'
     },
     {
       id: 5,
@@ -286,14 +286,14 @@ const RAW_WORKSHEETS: Record<string, RawWorksheetQuestion[]> = {
     {
       id: 2,
       number: 785,
-      question: 'Três opções representam 785, mas UMA NÃO representa. Assinale a opção INCORRETA:',
+      question: 'Qual das diferentes adições forma o número 785 com troca de 1 centena por 10 dezenas?',
       options: [
-        { text: '700 + 80 + 50', isCorrect: true },
-        { text: '700 + 80 + 5', isCorrect: false },
-        { text: '700 + 85', isCorrect: false },
-        { text: '600 + 180 + 5', isCorrect: false },
+        { text: '600 + 180 + 5', isCorrect: true },
+        { text: '700 + 80 + 50', isCorrect: false },
+        { text: '600 + 80 + 5', isCorrect: false },
+        { text: '500 + 180 + 5', isCorrect: false },
       ],
-      explanation: '700 + 80 + 50 = 830, não é 785.'
+      explanation: '600 + 180 = 780, mais 5 = 785.'
     },
     {
       id: 3,

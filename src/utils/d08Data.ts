@@ -125,17 +125,17 @@ export const D08_STATIC_QUESTIONS: D08Question[] = [
   {
     id: 't1_q9',
     tier: 1,
-    title: 'Atenção: Qual NÃO é 61?',
+    title: 'Diferentes Adições para 61',
     targetNumber: 61,
-    type: 'which_is_not',
-    questionText: 'Três opções somam 61, mas UMA NÃO soma. Qual das adições NÃO dá 61?',
+    type: 'choose_addition',
+    questionText: 'Qual das diferentes adições forma exatamente o número 61?',
     options: [
-      { id: 'opt1', text: '60 + 10', expression: '60 + 10 = 70', isCorrect: true, explanation: 'Acertou! 60 + 10 = 70, portanto NÃO é 61! A correta seria 60 + 1.' },
-      { id: 'opt2', text: '60 + 1', expression: '60 + 1 = 61', isCorrect: false, explanation: 'Esta soma dá 61 sim!' },
-      { id: 'opt3', text: '50 + 11', expression: '50 + 11 = 61', isCorrect: false, explanation: 'Esta soma dá 61 sim (50 + 11 = 61)!' },
-      { id: 'opt4', text: '40 + 21', expression: '40 + 21 = 61', isCorrect: false, explanation: 'Esta soma dá 61 sim (40 + 21 = 61)!' }
+      { id: 'opt1', text: '50 + 11', expression: '50 + 11', isCorrect: true, explanation: 'Sensacional! 50 + 11 = 61. Uma dezena de 60 foi trocada por 10 unidades para somar com 1!' },
+      { id: 'opt2', text: '60 + 10', expression: '60 + 10 = 70', isCorrect: false, explanation: '60 + 10 é igual a 70, passou de 61.' },
+      { id: 'opt3', text: '50 + 1', expression: '50 + 1 = 51', isCorrect: false, explanation: '50 + 1 dá 51, faltam 10 para 61.' },
+      { id: 'opt4', text: '40 + 11', expression: '40 + 11 = 51', isCorrect: false, explanation: '40 + 11 dá apenas 51.' }
     ],
-    hint: { centenas: 0, dezenas: 6, unidades: 1, text: 'Procure a alternativa que passa de 61.' }
+    hint: { centenas: 0, dezenas: 6, unidades: 1, text: '61 = 60 + 1. Se tirarmos 10 de 60 (fica 50), juntamos 10 com 1 (fica 11)!' }
   },
   {
     id: 't1_q10',
@@ -429,17 +429,17 @@ export const D08_STATIC_QUESTIONS: D08Question[] = [
   {
     id: 't3_q9',
     tier: 3,
-    title: 'Qual NÃO é 578?',
+    title: 'Troca de Centena para 578',
     targetNumber: 578,
-    type: 'which_is_not',
-    questionText: 'Três opções somam 578, mas UMA NÃO soma. Qual NÃO representa 578?',
+    type: 'choose_addition',
+    questionText: 'Qual das diferentes adições representa 578 com troca de 1 centena por 10 dezenas?',
     options: [
-      { id: 'opt1', text: '500 + 70 + 80', expression: '500 + 70 + 80 = 650', isCorrect: true, explanation: 'Parabéns! 500 + 70 + 80 = 650, portanto NÃO é 578 (o 8 é unidade, não 80)!' },
-      { id: 'opt2', text: '500 + 70 + 8', expression: '500 + 70 + 8 = 578', isCorrect: false, explanation: 'Esta representa 578 sim!' },
-      { id: 'opt3', text: '400 + 170 + 8', expression: '400 + 170 + 8 = 578', isCorrect: false, explanation: 'Esta representa 578 sim!' },
-      { id: 'opt4', text: '500 + 60 + 18', expression: '500 + 60 + 18 = 578', isCorrect: false, explanation: 'Esta representa 578 sim!' }
+      { id: 'opt1', text: '400 + 170 + 8', expression: '400 + 170 + 8', isCorrect: true, explanation: 'Incrível! 400 + 170 = 570, mais 8 = 578. Uma centena (100) foi trocada por 10 dezenas!' },
+      { id: 'opt2', text: '500 + 170 + 8', expression: '500 + 170 + 8 = 678', isCorrect: false, explanation: '500 + 170 + 8 dá 678, passou de 578.' },
+      { id: 'opt3', text: '400 + 70 + 8', expression: '400 + 70 + 8 = 478', isCorrect: false, explanation: '400 + 70 + 8 dá 478, faltam 100.' },
+      { id: 'opt4', text: '500 + 70 + 80', expression: '500 + 70 + 80 = 650', isCorrect: false, explanation: 'O 8 vale 8 unidades, não 80!' }
     ],
-    hint: { centenas: 5, dezenas: 7, unidades: 8, text: 'Atenção ao distrator que usou 80 em vez de 8.' }
+    hint: { centenas: 5, dezenas: 7, unidades: 8, text: '578 = 500 + 70 + 8. Tirando 100 de 500 (fica 400), juntamos 100 com 70 (fica 170)!' }
   },
   {
     id: 't3_q10',
@@ -461,17 +461,17 @@ export const D08_STATIC_QUESTIONS: D08Question[] = [
   {
     id: 't4_q1',
     tier: 4,
-    title: 'Atenção ao Detalhe: Número 645',
+    title: 'Compondo 645 com Troca',
     targetNumber: 645,
-    type: 'which_is_not',
-    questionText: 'Três das adições abaixo representam o número 645, mas UMA NÃO representa. Qual NÃO é 645?',
+    type: 'choose_addition',
+    questionText: 'Qual das adições abaixo forma exatamente o número 645?',
     options: [
-      { id: 'opt1', text: '600 + 40 + 50', expression: '600 + 40 + 50 = 690', isCorrect: true, explanation: 'Acertou em cheio! 600 + 40 + 50 = 690, portanto NÃO é 645 (a unidade deveria ser 5, não 50)!' },
-      { id: 'opt2', text: '600 + 40 + 5', expression: '600 + 40 + 5 = 645', isCorrect: false, explanation: 'Essa representa sim 645! (600 + 40 + 5 = 645)' },
-      { id: 'opt3', text: '600 + 45', expression: '600 + 45 = 645', isCorrect: false, explanation: 'Essa representa sim 645! (600 + 45 = 645)' },
-      { id: 'opt4', text: '500 + 140 + 5', expression: '500 + 140 + 5 = 645', isCorrect: false, explanation: 'Essa representa sim 645! 500 + 140 = 640, com 5 dá 645!' }
+      { id: 'opt1', text: '500 + 140 + 5', expression: '500 + 140 + 5', isCorrect: true, explanation: 'Exato! 500 + 140 = 640, com mais 5 unidades dá 645!' },
+      { id: 'opt2', text: '600 + 40 + 50', expression: '600 + 40 + 50 = 690', isCorrect: false, explanation: '600 + 40 + 50 = 690, a unidade virou 50 por engano.' },
+      { id: 'opt3', text: '500 + 40 + 5', expression: '500 + 40 + 5 = 545', isCorrect: false, explanation: '500 + 40 + 5 dá 545, faltaram 100.' },
+      { id: 'opt4', text: '600 + 140 + 5', expression: '600 + 140 + 5 = 745', isCorrect: false, explanation: '600 + 140 + 5 dá 745, passou de 645.' }
     ],
-    hint: { centenas: 6, dezenas: 4, unidades: 5, text: 'Cuidado com a pegadinha! Procure a soma cujo resultado NÃO é 645.' }
+    hint: { centenas: 6, dezenas: 4, unidades: 5, text: 'Pense em 645 como 500 mais 14 dezenas (140) mais 5 unidades.' }
   },
   {
     id: 't4_q2',
@@ -642,116 +642,194 @@ export const TIER_CONFIG = [
 ];
 
 /**
- * Generator for dynamic endless challenges
+ * Helper to sum numerical terms in an addition string like "300 + 40 + 8"
+ */
+function evalAdditionString(str: string): number {
+  return str
+    .split('+')
+    .map(part => parseInt(part.trim(), 10))
+    .filter(n => !isNaN(n))
+    .reduce((sum, val) => sum + val, 0);
+}
+
+/**
+ * Generator for dynamic endless challenges with strict mathematical validation
  */
 export function generateRandomD08Problem(tier: 1 | 2 | 3 | 4): D08Question {
   let targetNumber = 100;
+  let c = 0;
+  let d = 0;
+  let u = 0;
+
   if (tier === 1) {
-    const tens = Math.floor(Math.random() * 8) + 2; // 2..9
-    const units = Math.floor(Math.random() * 9) + 1; // 1..9
-    targetNumber = tens * 10 + units;
+    // 2-digit numbers: 21 to 99
+    d = Math.floor(Math.random() * 8) + 2; // 2..9
+    u = Math.floor(Math.random() * 9) + 1; // 1..9
+    targetNumber = d * 10 + u;
   } else if (tier === 2) {
-    const hundreds = Math.floor(Math.random() * 2) + 1; // 1..2
-    const tens = Math.floor(Math.random() * 9) + 1;
-    const units = Math.floor(Math.random() * 9) + 1;
-    targetNumber = hundreds * 100 + tens * 10 + units;
+    // Simple 3-digit: 111 to 299
+    c = Math.floor(Math.random() * 2) + 1; // 1..2
+    d = Math.floor(Math.random() * 8) + 1; // 1..8
+    u = Math.floor(Math.random() * 9) + 1; // 1..9
+    targetNumber = c * 100 + d * 10 + u;
   } else if (tier === 3) {
-    const hundreds = Math.floor(Math.random() * 3) + 3; // 3..5
-    const tens = Math.floor(Math.random() * 8) + 2;
-    const units = Math.floor(Math.random() * 9) + 1;
-    targetNumber = hundreds * 100 + tens * 10 + units;
+    // Intermediate 3-digit: 311 to 599
+    c = Math.floor(Math.random() * 3) + 3; // 3..5
+    d = Math.floor(Math.random() * 8) + 2; // 2..9
+    u = Math.floor(Math.random() * 9) + 1; // 1..9
+    targetNumber = c * 100 + d * 10 + u;
   } else {
-    const hundreds = Math.floor(Math.random() * 4) + 6; // 6..9
-    const tens = Math.floor(Math.random() * 9);
-    const units = Math.floor(Math.random() * 9) + 1;
-    targetNumber = hundreds * 100 + tens * 10 + units;
+    // Advanced 3-digit: 611 to 999
+    c = Math.floor(Math.random() * 4) + 6; // 6..9
+    d = Math.floor(Math.random() * 8) + 2; // 2..9
+    u = Math.floor(Math.random() * 9) + 1; // 1..9
+    targetNumber = c * 100 + d * 10 + u;
   }
 
-  const c = Math.floor(targetNumber / 100);
-  const d = Math.floor((targetNumber % 100) / 10);
-  const u = targetNumber % 10;
+  // Choose decomposition strategy: canonical or non-canonical
+  const canExchangeHundreds = c >= 1;
+  const canExchangeTens = d >= 2;
+  const chooseNonCanonical = Math.random() > 0.4 && (canExchangeHundreds || canExchangeTens);
 
-  // Decide decomposition type
-  const style = Math.random() > 0.5 ? 'non_canonical' : 'canonical';
-
-  let correctExpression = '';
   let correctText = '';
   let explanation = '';
 
-  if (style === 'canonical' || c === 0) {
+  if (chooseNonCanonical) {
+    if (canExchangeHundreds && (Math.random() > 0.5 || !canExchangeTens)) {
+      // Exchange 1 centena (100) for 10 dezenas
+      const newC = (c - 1) * 100;
+      const newD = (d + 10) * 10;
+      const parts: number[] = [];
+      if (newC > 0) parts.push(newC);
+      parts.push(newD);
+      parts.push(u);
+      correctText = parts.join(' + ');
+      explanation = `Sensacional! ${correctText} = ${targetNumber}. Foi feita uma troca de 1 centena (100) por 10 dezenas (${newD})!`;
+    } else {
+      // Exchange 1 dezena (10) for 10 unidades
+      const newD = (d - 1) * 10;
+      const newU = u + 10;
+      const parts: number[] = [];
+      if (c > 0) parts.push(c * 100);
+      if (newD > 0) parts.push(newD);
+      parts.push(newU);
+      correctText = parts.join(' + ');
+      explanation = `Muito bem! ${correctText} = ${targetNumber}. Foi trocada 1 dezena (10) para juntar com as unidades (${newU})!`;
+    }
+  } else {
+    // Canonical decomposition
+    const parts: number[] = [];
+    if (c > 0) parts.push(c * 100);
+    if (d > 0) parts.push(d * 10);
+    if (u > 0) parts.push(u);
+    correctText = parts.join(' + ');
     if (c > 0) {
-      correctExpression = `${c * 100} + ${d * 10} + ${u}`;
-      correctText = `${c * 100} + ${d * 10} + ${u}`;
       explanation = `Exato! ${c} centenas (${c * 100}) + ${d} dezenas (${d * 10}) + ${u} unidades (${u}) = ${targetNumber}!`;
     } else {
-      correctExpression = `${d * 10} + ${u}`;
-      correctText = `${d * 10} + ${u}`;
       explanation = `Perfeito! ${d} dezenas (${d * 10}) + ${u} unidades (${u}) = ${targetNumber}!`;
     }
+  }
+
+  // Generate verified distractors (none must equal targetNumber and all must be distinct)
+  const candidateDistractors: { text: string; explanation: string }[] = [];
+
+  // Distractor 1: Confusion of order / missing zeros (e.g. 30 + 40 + 8 or 4 + 7)
+  if (c > 0) {
+    candidateDistractors.push({
+      text: `${c * 10} + ${d * 10} + ${u}`,
+      explanation: `Atenção: ${c * 10} são ${c} dezenas, mas ${targetNumber} tem ${c} centenas (${c * 100})!`
+    });
   } else {
-    // Non canonical exchange
-    if (c >= 1 && d >= 1) {
-      // Transfer 100 to tens: (c-1)*100 + (100 + d*10) + u
-      const newC = (c - 1) * 100;
-      const newD = 100 + d * 10;
-      correctExpression = newC > 0 ? `${newC} + ${newD} + ${u}` : `${newD} + ${u}`;
-      correctText = correctExpression;
-      explanation = `Incrível! ${correctExpression} = ${targetNumber}. Foi feita uma troca de 1 centena por 10 dezenas!`;
-    } else {
-      // Transfer 10 to units: c*100 + (d-1)*10 + (10 + u)
-      const newD = (d - 1) * 10;
-      const newU = 10 + u;
-      correctExpression = `${c * 100} + ${newD} + ${newU}`;
-      correctText = correctExpression;
-      explanation = `Muito bem! ${correctExpression} = ${targetNumber}. Foi feita uma troca de 1 dezena por 10 unidades!`;
+    candidateDistractors.push({
+      text: `${d} + ${u}`,
+      explanation: `Cuidado: ${d} + ${u} = ${d + u}. O algarismo ${d} vale ${d * 10} dezenas!`
+    });
+  }
+
+  // Distractor 2: Over by 10 or 20
+  if (c > 0) {
+    candidateDistractors.push({
+      text: `${c * 100} + ${(d + 1) * 10} + ${u}`,
+      explanation: `Essa soma passa em 10 unidades do número ${targetNumber}!`
+    });
+  } else {
+    candidateDistractors.push({
+      text: `${(d + 1) * 10} + ${u}`,
+      explanation: `Essa soma passa em 10 unidades do número ${targetNumber}!`
+    });
+  }
+
+  // Distractor 3: Under by 10
+  if (c > 0 && d > 1) {
+    candidateDistractors.push({
+      text: `${c * 100} + ${(d - 1) * 10} + ${u}`,
+      explanation: `Faltaram 10 unidades para atingir ${targetNumber}!`
+    });
+  } else if (d > 1) {
+    candidateDistractors.push({
+      text: `${(d - 1) * 10} + ${u}`,
+      explanation: `Faltaram 10 unidades para atingir ${targetNumber}!`
+    });
+  }
+
+  // Distractor 4: Hundreds place confused
+  if (c > 1) {
+    candidateDistractors.push({
+      text: `${(c - 1) * 100} + ${d * 10} + ${u}`,
+      explanation: `Faltam 100 unidades (1 centena) para formar ${targetNumber}!`
+    });
+  } else {
+    candidateDistractors.push({
+      text: `${d * 10} + ${u * 10}`,
+      explanation: `As unidades foram multiplicadas por 10 por engano!`
+    });
+  }
+
+  // Distractor 5: Swap digits
+  candidateDistractors.push({
+    text: c > 0 ? `${c * 100} + ${u * 10} + ${d}` : `${u * 10} + ${d}`,
+    explanation: `A ordem das dezenas e unidades foi invertida!`
+  });
+
+  // Filter valid distractors: must not equal targetNumber and must be unique
+  const usedTexts = new Set<string>([correctText]);
+  const validDistractors: { text: string; explanation: string }[] = [];
+
+  for (const cand of candidateDistractors) {
+    if (usedTexts.has(cand.text)) continue;
+    const candSum = evalAdditionString(cand.text);
+    if (candSum === targetNumber) continue;
+    if (candSum <= 0) continue;
+    usedTexts.add(cand.text);
+    validDistractors.push(cand);
+    if (validDistractors.length === 3) break;
+  }
+
+  // Fallback if needed
+  while (validDistractors.length < 3) {
+    const diff = (validDistractors.length + 1) * 10;
+    const fbText = c > 0 ? `${c * 100} + ${d * 10 + diff} + ${u}` : `${d * 10 + diff} + ${u}`;
+    if (!usedTexts.has(fbText)) {
+      usedTexts.add(fbText);
+      validDistractors.push({
+        text: fbText,
+        explanation: `Essa soma é diferente do número alvo ${targetNumber}.`
+      });
     }
   }
-
-  // Create 3 plausible distractors
-  const distractors: { text: string; exp: string; isCorrect: boolean; explanation: string }[] = [];
-  
-  if (c > 0) {
-    distractors.push({
-      text: `${c * 10} + ${d * 10} + ${u}`,
-      exp: `${c * 10} + ${d * 10} + ${u}`,
-      isCorrect: false,
-      explanation: `Atenção: ${c * 10} são apenas ${c} dezenas, mas ${targetNumber} tem ${c} centenas (${c * 100})!`
-    });
-  } else {
-    distractors.push({
-      text: `${d} + ${u}`,
-      exp: `${d} + ${u}`,
-      isCorrect: false,
-      explanation: `Cuidado: ${d} + ${u} = ${d + u}. O ${d} vale ${d * 10}!`
-    });
-  }
-
-  distractors.push({
-    text: c > 0 ? `${c * 100} + ${(d + 1) * 10} + ${u}` : `${(d + 1) * 10} + ${u}`,
-    exp: c > 0 ? `${c * 100} + ${(d + 1) * 10} + ${u}` : `${(d + 1) * 10} + ${u}`,
-    isCorrect: false,
-    explanation: `Essa soma passa em 10 unidades do número ${targetNumber}!`
-  });
-
-  distractors.push({
-    text: c > 0 ? `${c * 100} + ${d * 100} + ${u}` : `${d * 10} + ${u * 10}`,
-    exp: c > 0 ? `${c * 100} + ${d * 100} + ${u}` : `${d * 10} + ${u * 10}`,
-    isCorrect: false,
-    explanation: `A ordem das dezenas foi confundida com centenas!`
-  });
 
   const options = [
     {
       id: 'opt_correct',
       text: correctText,
-      expression: correctExpression,
+      expression: correctText,
       isCorrect: true,
       explanation
     },
-    ...distractors.map((d, idx) => ({
+    ...validDistractors.slice(0, 3).map((d, idx) => ({
       id: `opt_dist_${idx}`,
       text: d.text,
-      expression: d.exp,
+      expression: d.text,
       isCorrect: false,
       explanation: d.explanation
     }))
@@ -764,7 +842,7 @@ export function generateRandomD08Problem(tier: 1 | 2 | 3 | 4): D08Question {
   }
 
   return {
-    id: `dyn_${Date.now()}_${targetNumber}`,
+    id: `dyn_${Date.now()}_${targetNumber}_${Math.random().toString(36).substring(2, 6)}`,
     tier,
     title: `Desafio Especial: Número ${targetNumber}`,
     targetNumber,
@@ -775,7 +853,7 @@ export function generateRandomD08Problem(tier: 1 | 2 | 3 | 4): D08Question {
       centenas: c,
       dezenas: d,
       unidades: u,
-      text: `O número ${targetNumber} possui ${c} centenas (${c * 100}), ${d} dezenas (${d * 10}) e ${u} unidades (${u}).`
+      text: `O número ${targetNumber} possui ${c > 0 ? `${c} centenas (${c * 100}), ` : ''}${d} dezenas (${d * 10}) e ${u} unidades (${u}).`
     }
   };
 }

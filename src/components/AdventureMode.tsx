@@ -36,12 +36,14 @@ interface AdventureModeProps {
   onAddStars: (amount: number) => void;
   onAddScore: (amount: number) => void;
   soundEnabled: boolean;
+  onEquationSolved?: (streak: number) => void;
 }
 
 export const AdventureMode: React.FC<AdventureModeProps> = ({
   onAddStars,
   onAddScore,
-  soundEnabled
+  soundEnabled,
+  onEquationSolved
 }) => {
   const [selectedTier, setSelectedTier] = useState<1 | 2 | 3 | 4>(1);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -61,12 +63,16 @@ export const AdventureMode: React.FC<AdventureModeProps> = ({
   });
 
   const activeQuestions = tierQuestions[selectedTier] || [];
-  const currentQuestion: D08Question = activeQuestions[currentQuestionIndex] || activeQuestions[0];
+  const currentQuestion: D08Question = activeQuestions[currentQuestionIndex] || activeQuestions[0] || getShuffledTierQuestions(selectedTier, 10)[0];
   const isLastQuestion = currentQuestionIndex === activeQuestions.length - 1;
 
   const handleSelectTier = (tier: 1 | 2 | 3 | 4) => {
     if (soundEnabled) playPopSound();
     setSelectedTier(tier);
+    setTierQuestions(prev => ({
+      ...prev,
+      [tier]: getShuffledTierQuestions(tier, 10)
+    }));
     setCurrentQuestionIndex(0);
     setSelectedOptionId(null);
     setIsAnswered(false);
@@ -105,6 +111,7 @@ export const AdventureMode: React.FC<AdventureModeProps> = ({
       const starReward = newStreak >= 3 ? 2 : 1;
       onAddStars(starReward);
       onAddScore(50 + (newStreak * 10));
+      onEquationSolved?.(newStreak);
 
       try {
         confetti({

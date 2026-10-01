@@ -27,25 +27,33 @@ export const GoldenBlocksView: React.FC<GoldenBlocksViewProps> = ({
         </div>
 
         <div className="flex-1 flex flex-wrap items-center justify-center gap-2 min-h-[70px]">
-          {centenas === 0 ? (
+          {centenas <= 0 ? (
             <span className="text-xs text-slate-400 italic">Nenhuma centena</span>
           ) : (
-            Array.from({ length: centenas }).map((_, i) => (
+            Array.from({ length: Math.max(0, Math.min(centenas, 12)) }).map((_, i) => (
               <div
                 key={`c_${i}`}
-                title="1 Placa = 100 unidades"
-                className={`relative bg-amber-300 border-2 border-amber-600 rounded shadow-xs overflow-hidden grid grid-cols-5 grid-rows-5 ${
-                  compact ? 'w-10 h-10' : 'w-14 h-14'
+                title="1 Placa = 100 unidades (10 dezenas)"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(10, 1fr)',
+                  gridTemplateRows: 'repeat(10, 1fr)'
+                }}
+                className={`relative bg-amber-300 border-2 border-amber-600 rounded shadow-xs overflow-hidden ${
+                  compact ? 'w-11 h-11' : 'w-16 h-16'
                 }`}
               >
-                {Array.from({ length: 25 }).map((_, cellIdx) => (
-                  <div key={cellIdx} className="border border-amber-500/40" />
+                {Array.from({ length: 100 }).map((_, cellIdx) => (
+                  <div key={cellIdx} className="border-[0.5px] border-amber-600/30" />
                 ))}
-                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-black text-amber-900/60 pointer-events-none">
+                <span className="absolute inset-0 flex items-center justify-center text-[10px] font-black text-amber-950/70 pointer-events-none drop-shadow-2xs">
                   100
                 </span>
               </div>
             ))
+          )}
+          {centenas > 12 && (
+            <span className="text-xs font-bold text-emerald-800">+{centenas - 12} placas</span>
           )}
         </div>
       </div>
@@ -62,19 +70,19 @@ export const GoldenBlocksView: React.FC<GoldenBlocksViewProps> = ({
         </div>
 
         <div className="flex-1 flex flex-wrap items-center justify-center gap-1.5 min-h-[70px]">
-          {dezenas === 0 ? (
+          {dezenas <= 0 ? (
             <span className="text-xs text-slate-400 italic">Nenhuma dezena</span>
           ) : (
-            Array.from({ length: Math.min(dezenas, 20) }).map((_, i) => (
+            Array.from({ length: Math.max(0, Math.min(dezenas, 20)) }).map((_, i) => (
               <div
                 key={`d_${i}`}
                 title="1 Barra = 10 unidades"
                 className={`bg-amber-400 border border-amber-700 rounded-xs shadow-xs flex flex-col justify-between ${
-                  compact ? 'w-2.5 h-10' : 'w-3.5 h-14'
+                  compact ? 'w-2.5 h-11' : 'w-3.5 h-16'
                 }`}
               >
                 {Array.from({ length: 10 }).map((_, segment) => (
-                  <div key={segment} className="h-full border-b border-amber-600/50 last:border-b-0" />
+                  <div key={segment} className="h-full border-b border-amber-600/60 last:border-b-0" />
                 ))}
               </div>
             ))
@@ -96,11 +104,11 @@ export const GoldenBlocksView: React.FC<GoldenBlocksViewProps> = ({
           </span>
         </div>
 
-        <div className="flex-1 flex flex-wrap items-center justify-center gap-1 min-h-[70px] max-h-24 overflow-y-auto">
-          {unidades === 0 ? (
+        <div className="flex-1 flex flex-wrap items-center justify-center gap-1 min-h-[70px] max-h-28 overflow-y-auto">
+          {unidades <= 0 ? (
             <span className="text-xs text-slate-400 italic">Nenhuma unidade</span>
           ) : (
-            Array.from({ length: Math.min(unidades, 30) }).map((_, i) => (
+            Array.from({ length: Math.max(0, Math.min(unidades, 30)) }).map((_, i) => (
               <div
                 key={`u_${i}`}
                 title="1 Cubinho = 1 unidade"
