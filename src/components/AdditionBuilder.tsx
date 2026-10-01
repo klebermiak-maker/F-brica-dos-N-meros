@@ -12,6 +12,7 @@ import {
   Layers,
   ArrowRight
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface AdditionBuilderProps {
   onAddStars: (amount: number) => void;
@@ -193,14 +194,16 @@ export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
 
           <div className="flex items-center gap-2">
             {discoveredCombinations.length >= 2 && (
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleNextLevel}
                 type="button"
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-transform hover:scale-105"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm cursor-pointer"
               >
                 <span>Próximo Nível</span>
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </motion.button>
             )}
             <button
               onClick={() => {
@@ -208,7 +211,7 @@ export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
                 setDiscoveredCombinations([]);
               }}
               type="button"
-              className="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100"
+              className="p-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 cursor-pointer"
               title="Reiniciar nível atual"
             >
               <RotateCcw className="w-4 h-4" />
@@ -216,18 +219,27 @@ export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
           </div>
         </div>
 
-        {/* Big Target Banner */}
-        <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-2xl p-4 text-white text-center shadow-md">
-          <div className="text-xs uppercase font-bold text-amber-100">
-            Número Alvo a Conquistar
-          </div>
-          <div className="text-4xl sm:text-5xl font-mono font-black my-1">
-            {currentPuzzle.target}
-          </div>
-          <div className="text-xs text-amber-100 font-medium">
-            Descobertas: {discoveredCombinations.length} de 3 formas diferentes
-          </div>
-        </div>
+        {/* Big Target Banner with smooth transition */}
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={currentPuzzle.target}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-2xl p-4 text-white text-center shadow-md"
+          >
+            <div className="text-xs uppercase font-bold text-amber-100">
+              Número Alvo a Conquistar
+            </div>
+            <div className="text-4xl sm:text-5xl font-mono font-black my-1">
+              {currentPuzzle.target}
+            </div>
+            <div className="text-xs text-amber-100 font-medium">
+              Descobertas: {discoveredCombinations.length} de 3 formas diferentes
+            </div>
+          </motion.div>
+        </AnimatePresence>
 
         {/* Discovered Combinations Tags */}
         {discoveredCombinations.length > 0 && (
@@ -237,15 +249,19 @@ export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
               <span>Suas Fórmulas Descobertas:</span>
             </div>
             <div className="flex flex-wrap gap-2">
-              {discoveredCombinations.map((combo, idx) => (
-                <div
-                  key={idx}
-                  className="px-3 py-1 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-900 font-mono font-bold text-xs flex items-center gap-1.5 shadow-2xs"
-                >
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>{combo} = {currentPuzzle.target}</span>
-                </div>
-              ))}
+              <AnimatePresence>
+                {discoveredCombinations.map((combo, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="px-3 py-1 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-900 font-mono font-bold text-xs flex items-center gap-1.5 shadow-2xs"
+                  >
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>{combo} = {currentPuzzle.target}</span>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           </div>
         )}
@@ -258,35 +274,42 @@ export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
           <button
             onClick={handleClearTray}
             disabled={trayTiles.length === 0}
-            className="flex items-center gap-1 text-rose-400 hover:text-rose-300 disabled:opacity-30 transition-colors"
+            className="flex items-center gap-1 text-rose-400 hover:text-rose-300 disabled:opacity-30 transition-colors cursor-pointer"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span>Limpar Esteira</span>
           </button>
         </div>
 
-        {/* Tiles in tray */}
+        {/* Tiles in tray with smooth spring bounce */}
         <div className="min-h-[90px] bg-slate-800/80 border-2 border-dashed border-slate-700 rounded-2xl p-4 flex flex-wrap items-center justify-center gap-3">
           {trayTiles.length === 0 ? (
             <span className="text-xs sm:text-sm text-slate-400 italic">
               Nenhum cartão na esteira. Clique nos cartões amarelos abaixo para somar!
             </span>
           ) : (
-            trayTiles.map((val, idx) => (
-              <React.Fragment key={idx}>
-                {idx > 0 && <span className="text-amber-400 font-bold text-xl">+</span>}
-                <button
-                  onClick={() => handleRemoveTile(idx)}
-                  className="px-4 py-2.5 bg-amber-400 hover:bg-rose-400 text-amber-950 hover:text-white font-mono font-black text-xl rounded-xl shadow-md transition-all transform hover:scale-105 group relative cursor-pointer"
-                  title="Clique para remover da esteira"
-                >
-                  {val}
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white rounded-full text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    ×
-                  </span>
-                </button>
-              </React.Fragment>
-            ))
+            <AnimatePresence>
+              {trayTiles.map((val, idx) => (
+                <React.Fragment key={`${val}_${idx}`}>
+                  {idx > 0 && <span className="text-amber-400 font-bold text-xl">+</span>}
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0.5, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.5 }}
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleRemoveTile(idx)}
+                    className="px-4 py-2.5 bg-amber-400 hover:bg-rose-400 text-amber-950 hover:text-white font-mono font-black text-xl rounded-xl shadow-md transition-colors group relative cursor-pointer"
+                    title="Clique para remover da esteira"
+                  >
+                    {val}
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white rounded-full text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      ×
+                    </span>
+                  </motion.button>
+                </React.Fragment>
+              ))}
+            </AnimatePresence>
           )}
         </div>
 
@@ -345,17 +368,19 @@ export const AdditionBuilder: React.FC<AdditionBuilderProps> = ({
             }
 
             return (
-              <button
+              <motion.button
                 key={`${tileVal}_${idx}`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => handleAddTile(tileVal)}
                 type="button"
-                className={`p-3 sm:p-4 rounded-xl border-2 font-mono font-black text-xl shadow-xs transition-transform hover:scale-105 active:scale-95 flex flex-col items-center justify-center cursor-pointer ${badgeColor}`}
+                className={`p-3 sm:p-4 rounded-xl border-2 font-mono font-black text-xl shadow-xs flex flex-col items-center justify-center cursor-pointer ${badgeColor}`}
               >
                 <span>{tileVal}</span>
                 <span className="text-[10px] font-sans font-medium text-slate-500 mt-0.5">
                   {isHundreds ? 'Centena' : isTens ? 'Dezena' : 'Unidade'}
                 </span>
-              </button>
+              </motion.button>
             );
           })}
         </div>

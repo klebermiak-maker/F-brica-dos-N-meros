@@ -1,6 +1,7 @@
 import React from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { speakPortuguese, stopSpeech } from '../utils/audio';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface MascotProps {
   mood?: 'happy' | 'thinking' | 'celebrating' | 'teaching';
@@ -38,11 +39,16 @@ export const MascotAvatar: React.FC<MascotProps> = ({
 
   return (
     <div className="flex items-start gap-3">
-      {/* Robot SVG Avatar */}
-      <div className={`relative shrink-0 ${sizeClasses}`}>
+      {/* Robot SVG Avatar with gentle breathing motion */}
+      <motion.div 
+        animate={{ y: [0, -3, 0] }}
+        transition={{ repeat: Infinity, duration: 3.5, ease: 'easeInOut' }}
+        whileHover={{ scale: 1.06 }}
+        className={`relative shrink-0 ${sizeClasses}`}
+      >
         <svg
           viewBox="0 0 100 100"
-          className="w-full h-full drop-shadow-md select-none transform transition-transform hover:scale-105"
+          className="w-full h-full drop-shadow-md select-none"
         >
           {/* Antenna */}
           <line x1="50" y1="20" x2="50" y2="8" stroke="#F59E0B" strokeWidth="4" strokeLinecap="round" />
@@ -138,42 +144,51 @@ export const MascotAvatar: React.FC<MascotProps> = ({
         <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[10px] font-bold bg-amber-500 text-white px-1.5 py-0.2 rounded-full whitespace-nowrap shadow-xs">
           Dito
         </span>
-      </div>
+      </motion.div>
 
-      {/* Speech bubble */}
-      {message && (
-        <div className="relative bg-white border border-amber-200/80 rounded-2xl p-3.5 shadow-sm text-slate-800 text-sm flex-1 max-w-xl">
-          <div className="absolute top-4 -left-2 w-3 h-3 bg-white border-l border-t border-amber-200/80 transform -rotate-45" />
-          
-          <div className="flex items-start justify-between gap-2">
-            <p className="leading-snug font-medium text-slate-700">{message}</p>
+      {/* Speech bubble with fluid spring transition */}
+      <AnimatePresence mode="wait">
+        {message && (
+          <motion.div 
+            key={message}
+            initial={{ opacity: 0, scale: 0.95, y: 5 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="relative bg-white border border-amber-200/80 rounded-2xl p-3.5 shadow-sm text-slate-800 text-sm flex-1 max-w-xl"
+          >
+            <div className="absolute top-4 -left-2 w-3 h-3 bg-white border-l border-t border-amber-200/80 transform -rotate-45" />
             
-            {/* Audio speech button */}
-            <button
-              onClick={handleSpeak}
-              type="button"
-              title={isSpeaking ? "Parar leitura" : "Ouvir leitura em voz alta"}
-              className={`shrink-0 p-1.5 rounded-lg border transition-colors flex items-center gap-1 text-xs font-semibold ${
-                isSpeaking 
-                  ? 'bg-amber-100 border-amber-400 text-amber-800 animate-pulse' 
-                  : 'bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100'
-              }`}
-            >
-              {isSpeaking ? (
-                <>
-                  <VolumeX className="w-4 h-4 text-amber-700" />
-                  <span className="hidden sm:inline">Parar</span>
-                </>
-              ) : (
-                <>
-                  <Volume2 className="w-4 h-4 text-amber-700" />
-                  <span className="hidden sm:inline">Ouvir</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-      )}
+            <div className="flex items-start justify-between gap-2">
+              <p className="leading-snug font-medium text-slate-700">{message}</p>
+              
+              {/* Audio speech button */}
+              <button
+                onClick={handleSpeak}
+                type="button"
+                title={isSpeaking ? "Parar leitura" : "Ouvir leitura em voz alta"}
+                className={`shrink-0 p-1.5 rounded-lg border transition-colors flex items-center gap-1 text-xs font-semibold cursor-pointer ${
+                  isSpeaking 
+                    ? 'bg-amber-100 border-amber-400 text-amber-800 animate-pulse' 
+                    : 'bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100'
+                }`}
+              >
+                {isSpeaking ? (
+                  <>
+                    <VolumeX className="w-4 h-4 text-amber-700" />
+                    <span className="hidden sm:inline">Parar</span>
+                  </>
+                ) : (
+                  <>
+                    <Volume2 className="w-4 h-4 text-amber-700" />
+                    <span className="hidden sm:inline">Ouvir</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

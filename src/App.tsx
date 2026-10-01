@@ -11,6 +11,7 @@ import { GoldenMaterialLab } from './components/GoldenMaterialLab';
 import { AdditionBuilder } from './components/AdditionBuilder';
 import { WorksheetGenerator } from './components/WorksheetGenerator';
 import { PedagogicalGuide } from './components/PedagogicalGuide';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function App() {
   const [currentMode, setCurrentMode] = useState<GameMode>('adventure');
@@ -75,39 +76,53 @@ export default function App() {
         onToggleSound={handleToggleSound}
       />
 
-      {/* Main Game Stage */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        {currentMode === 'adventure' && (
-          <AdventureMode
-            onAddStars={handleAddStars}
-            onAddScore={handleAddScore}
-            soundEnabled={soundEnabled}
-          />
-        )}
+      {/* Main Game Stage with Fluid Framer-Motion Transitions */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentMode}
+            initial={{ opacity: 0, y: 16, scale: 0.985 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -16, scale: 0.985 }}
+            transition={{ 
+              duration: 0.22, 
+              ease: [0.16, 1, 0.3, 1] 
+            }}
+            className="w-full"
+          >
+            {currentMode === 'adventure' && (
+              <AdventureMode
+                onAddStars={handleAddStars}
+                onAddScore={handleAddScore}
+                soundEnabled={soundEnabled}
+              />
+            )}
 
-        {currentMode === 'laboratory' && (
-          <GoldenMaterialLab
-            onAddStars={handleAddStars}
-            onAddScore={handleAddScore}
-            soundEnabled={soundEnabled}
-          />
-        )}
+            {currentMode === 'laboratory' && (
+              <GoldenMaterialLab
+                onAddStars={handleAddStars}
+                onAddScore={handleAddScore}
+                soundEnabled={soundEnabled}
+              />
+            )}
 
-        {currentMode === 'builder' && (
-          <AdditionBuilder
-            onAddStars={handleAddStars}
-            onAddScore={handleAddScore}
-            soundEnabled={soundEnabled}
-          />
-        )}
+            {currentMode === 'builder' && (
+              <AdditionBuilder
+                onAddStars={handleAddStars}
+                onAddScore={handleAddScore}
+                soundEnabled={soundEnabled}
+              />
+            )}
 
-        {currentMode === 'worksheet' && (
-          <WorksheetGenerator />
-        )}
+            {currentMode === 'worksheet' && (
+              <WorksheetGenerator />
+            )}
 
-        {currentMode === 'guide' && (
-          <PedagogicalGuide />
-        )}
+            {currentMode === 'guide' && (
+              <PedagogicalGuide />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Quiet, Human Educational Footer */}

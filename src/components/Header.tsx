@@ -2,6 +2,7 @@ import React from 'react';
 import { GameMode } from '../types/math';
 import { Star, Volume2, VolumeX, Sparkles, Printer, BookOpen, Compass, Layers, Wrench } from 'lucide-react';
 import { playPopSound } from '../utils/audio';
+import { motion } from 'framer-motion';
 
 interface HeaderProps {
   currentMode: GameMode;
@@ -55,14 +56,23 @@ export const Header: React.FC<HeaderProps> = ({
                   playPopSound();
                   onSelectMode(item.mode);
                 }}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
+                className={`relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                   isActive
-                    ? 'bg-amber-100/90 text-amber-900 shadow-xs'
+                    ? 'text-amber-950 font-bold'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
                 }`}
               >
-                {item.icon}
-                <span>{item.label}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="activeNavBackground"
+                    className="absolute inset-0 bg-amber-100/90 border border-amber-300/80 rounded-xl shadow-2xs"
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-1.5">
+                  {item.icon}
+                  <span>{item.label}</span>
+                </span>
               </button>
             );
           })}
@@ -91,7 +101,7 @@ export const Header: React.FC<HeaderProps> = ({
               onToggleSound();
             }}
             type="button"
-            className="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+            className="p-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors cursor-pointer"
             title={soundEnabled ? 'Silenciar som' : 'Ativar som'}
           >
             {soundEnabled ? (
@@ -114,9 +124,9 @@ export const Header: React.FC<HeaderProps> = ({
                 playPopSound();
                 onSelectMode(item.mode);
               }}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold whitespace-nowrap shrink-0 transition-colors ${
+              className={`relative flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 transition-colors cursor-pointer ${
                 isActive
-                  ? 'bg-amber-500 text-white'
+                  ? 'bg-amber-500 text-white font-bold shadow-xs'
                   : 'text-slate-600 bg-white border border-slate-200 hover:bg-slate-50'
               }`}
             >
