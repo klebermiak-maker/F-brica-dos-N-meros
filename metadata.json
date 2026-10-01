@@ -1,0 +1,6 @@
+{
+  "name": "Fábrica dos Números D08 - Compor e Decompor com Adições",
+  "description": "Jogo educativo de matemática para o 2º ano do Ensino Fundamental alinhado ao descritor D08: compor e decompor números naturais de até 3 ordens por meio de diferentes adições.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
